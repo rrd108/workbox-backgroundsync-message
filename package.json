@@ -1,0 +1,25 @@
+{
+  "name": "@rrd108/workbox-backgroundsync-message",
+  "version": "0.0.1",
+  "description": "Extending workbox backgroundsync plugin with response messages",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rrd108/workbox-backgroundsync-message.git"
+  },
+  "keywords": [
+    "workbox",
+    "workboxjs",
+    "service worker",
+    "backgroundsync",
+    "workbox-plugin"
+  ],
+  "author": "rrd108",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rrd108/workbox-backgroundsync-message/issues"
+  },
+  "homepage": "https://github.com/rrd108/workbox-backgroundsync-message#readme",
+  "dependencies": {
+    "workbox-background-sync": "^6.0.2"
+  }
+}
