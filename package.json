@@ -13,6 +13,7 @@
     "backgroundsync",
     "workbox-plugin"
   ],
+  "export" : "backgroundSyncMessagePlugin.js", 
   "author": "rrd108",
   "license": "MIT",
   "bugs": {
