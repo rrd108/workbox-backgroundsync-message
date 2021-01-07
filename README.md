@@ -15,7 +15,7 @@ There are a few things should be in place to get the response
 1. Copy the plugin file to `src`
 
 ````
-cp node_modules/@rrd108/workbox-backgroundsync-message/backgroundSyncMessagePlugin.js src/
+cp node_modules/@rrd/workbox-backgroundsync-message/backgroundSyncMessagePlugin.js src/
 ````
 
 First copy the plugin file from your `node_modules` folder to your `src` folder. As service workers have their own scope it should be done manually, it can not be imported.
