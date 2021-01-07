@@ -1,30 +1,50 @@
-import BackgroundSyncPlugin from 'workbox-background-sync'
+const replayRequestsMessage = async function() {
+  console.warn('replayRequestsMessage called')
+  let entry;
+  while (entry = await this.shiftRequest()) {
+    try {
 
-class BackgroundSyncMessagePlugin extends BackgroundSyncPlugin {
+      // the original function call does not do anything with the response
+      fetch(entry.request.clone())
+        .then(response => response.json())
+        .then(data => {
+          self.clients.matchAll()
+            .then(function (clients) {
+              if (clients && clients.length) {
+                //Respond to last focused tab
+                clients[0].postMessage(data)
+              }
+            })
+          })
+      // custom modification of the replayRequestMessage method ends here
 
-  /*constructor(...queueArgs) {
-    this._queue = new Queue(...queueArgs)
-    this.fetchDidFail = this.fetchDidFail.bind(this)
-  }*/
+      if (process.env.NODE_ENV !== 'production') {
+        logger.log(`Request for '${getFriendlyURL(entry.request.url)}'` +
+            `has been replayed in queue '${this._name}'`)
+      }
+    } catch (error) {
+      await this.unshiftRequest(entry);
 
-  /* fetchDidFail(request) {
-    this._queue.pushRequest(request)
-  } */
-
-  fetchDidSucceed({request, response, event, state}) {
-    console.warn('fetchDidSucceed', {request, response, event, state})
-    return response
+      if (process.env.NODE_ENV !== 'production') {
+        logger.log(`Request for '${getFriendlyURL(entry.request.url)}'` +
+            `failed to replay, putting it back in queue '${this._name}'`)
+      }
+      throw new WorkboxError('queue-replay-failed', {name: this._name})
+    }
   }
-  handlerWillRespond({request, response, event, state}) {
-    console.warn('handlerWillRespond', {request, response, event, state})
-    return response
-  }
-  handlerDidRespond({request, response, event, state}) {
-    console.warn('handlerDidRespond', {request, response, event, state})
-  }
-  handlerDidComplete({request, response, error, event, state}) {
-    console.warn('handlerDidComplete', {request, response, error, event, state})
+  if (process.env.NODE_ENV !== 'production') {
+    logger.log(`All requests in queue '${this.name}' have successfully ` +
+        `replayed; the queue is now empty!`)
   }
 }
 
-export {BackgroundSyncMessagePlugin}
+class BackgroundSyncMessagePlugin extends workbox.backgroundSync.Plugin {
+
+  constructor(...queueArgs) {
+    let args = { ...queueArgs}
+    super(args[0], { ...args[1], onSync: replayRequestsMessage })
+  }
+
+  // fetchDidSucceed callback is NOT fired for backgroundSync
+
+}
