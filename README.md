@@ -20,9 +20,17 @@ cp node_modules/@rrd/workbox-backgroundsync-message/backgroundSyncMessagePlugin.
 
 First copy the plugin file from your `node_modules` folder to your `src` folder. As service workers have their own scope it should be done manually, it can not be imported.
 This step should be done again on updating this plugin.
-(Maybe a `postbuild` script in `package.json` could solve this).
+(Maybe a `postinstall` script in `package.json` could solve this).
 
-2. `/vue.config.js`
+2. Postbuild script
+
+Add this new line to your `package.json` file at the `scripts` block. This will copy the plugin from `src` to `dist` after each build.
+
+````json
+  "postbuild": "cp src/backgroundSyncMessagePlugin.js dist/",
+````
+
+3. `/vue.config.js`
 
 ````js
 module.exports = {
@@ -35,7 +43,7 @@ module.exports = {
 }
 ````
 
-3. `/src/sw.js`
+4. `/src/sw.js`
 
 ````js
 importScripts('/backgroundSyncMessagePlugin.js')
@@ -54,11 +62,12 @@ workbox.routing.registerRoute(
 )
 ````
 
-4. At any of your components
+5. At any of your components
 
 ````js
 created(){
     navigator.serviceWorker.addEventListener('message', event => {
+      // do whatever you want with the response
       console.warn('message got in this component', event.data);
     });
   },
