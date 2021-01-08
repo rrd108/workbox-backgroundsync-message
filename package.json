@@ -1,6 +1,6 @@
 {
   "name": "@rrd/workbox-backgroundsync-message",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Extending workbox backgroundsync plugin with response messages",
   "repository": {
     "type": "git",
