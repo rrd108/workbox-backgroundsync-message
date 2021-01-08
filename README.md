@@ -12,15 +12,19 @@ Workbox backgroundSync is amazing [https://developers.google.com/web/tools/workb
 
 There are a few things should be in place to get the response
 
-1. Copy the plugin file to `src`
+1. Install
 
-````
-cp node_modules/@rrd/workbox-backgroundsync-message/backgroundSyncMessagePlugin.js src/
-````
+`npm i @rrd/workbox-backgroundsync-message`
+
+Copy the plugin file to `src`
+
+`cp node_modules/@rrd/workbox-backgroundsync-message/backgroundSyncMessagePlugin.js src/`
 
 First copy the plugin file from your `node_modules` folder to your `src` folder. As service workers have their own scope it should be done manually, it can not be imported.
 This step should be done again on updating this plugin.
 (Maybe a `postinstall` script in `package.json` could solve this).
+
+Alternatively you can just copy the `backgroundSyncMessagePlugin.js` file from the repo to your `src` folder.
 
 2. Postbuild script
 
